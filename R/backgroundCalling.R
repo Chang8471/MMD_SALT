@@ -1,9 +1,10 @@
 
 parEst_itr = function(Y_mtx,pi_mtx = NULL,Z_mtx = NULL,
                       EBrobust=F,returnPar = F,adj_posterior=F,filterBackground  =F,
-                      approxSignalPar = F,subtractBackground = F,
+                      approxSignalPar = F,
                       Beta_bayes = F, Beta_0_weight = F, Beta_kappa = 10,
                       shrinktoMean=F){
+
   # initialize and estimate pi_i
   if (!is.null(pi_mtx)){
     Z_mtx = pi_mtx>.5
@@ -12,11 +13,10 @@ parEst_itr = function(Y_mtx,pi_mtx = NULL,Z_mtx = NULL,
     pi_i = colMeans(Z_mtx)
   }
 
-
   # check if all elements are provided
   if (is.null(Z_mtx)&is.null(pi_mtx)){ message("error: Z or pi mtx not correctly provided");return(NULL)}
 
-  ############## background
+  ############## background parameter estimation
   Y_mtx_background = Y_mtx
   Y_mtx_background[Z_mtx==1] = NA
   mu_0i = matrix(colMeans(Y_mtx_background,T),ncol = ncol(Y_mtx),nrow = nrow(Y_mtx),byrow = T)
@@ -24,11 +24,10 @@ parEst_itr = function(Y_mtx,pi_mtx = NULL,Z_mtx = NULL,
 
 
   ################### take above background
-  if(subtractBackground) {
-    logY_mtx = log(Y_mtx-mu_0i)
-    if(any(is.na(logY_mtx)&Z_mtx)) message("error: background subtraction produce NA after log transformation")
-  }else  {logY_mtx = log(Y_mtx)}
-  logY_mtx[Z_mtx==0] = NA
+  # subtract estimated background mean from raw count, then log transform
+  logY_mtx = log(Y_mtx-mu_0i)
+  #if(any(is.na(logY_mtx)&Z_mtx)) message("error: background subtraction produce NA after log transformation")
+  logY_mtx[Z_mtx==0] = NA # turn identified background to NA
 
   x_gene = factor(rep(rownames(logY_mtx),ncol(logY_mtx)),
                   levels=rownames(logY_mtx))
