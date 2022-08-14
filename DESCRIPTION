@@ -1,0 +1,11 @@
+Package: nCounterNorm
+Type: Package
+Title: Data driven background noise and signal calling algorithm for NanoString nCounter data
+Version: 0.0.1
+Author: Chang Yu
+Maintainer: The package maintainer <chang_yu@brown.edu>
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
