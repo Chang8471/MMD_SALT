@@ -189,64 +189,6 @@ forceMono = function(Y_mtx,useparEst_itr_out,  parEst_itr_out=NULL,gridResolutio
   return(z_final)
 }
 
-forceMono2 = function(Y_mtx,useparEst_itr_out,  parEst_itr_out=NULL,gridResolution=500,
-                      alphai_beta_g=NULL,sigma2_1g = NULL,mu_0i=NULL,sigma2_0i=NULL,pi_prior=NULL){
-
-  if(useparEst_itr_out){
-    if(!is.null(parEst_itr_out$S2_hat)){
-      alphai_beta_g = parEst_itr_out$m_hat
-      sigma2_1g = parEst_itr_out$S2_hat
-    }else{
-      alphai_beta_g = parEst_itr_out$alphai_beta_g
-      sigma2_1g = parEst_itr_out$sigma2_1g
-    }
-    mu_0i = parEst_itr_out$mu_0i
-    sigma2_0i = parEst_itr_out$sigma2_0i
-    pi_prior = parEst_itr_out$pi_prior
-  }
-
-  if(any(is.null(alphai_beta_g),is.null(sigma2_1g),is.null(mu_0i),is.null(sigma2_0i),is.null(pi_prior))) stop("argument missing")
-
-
-  ####### correction
-  # seq of nodes
-  Y_nodes = exp(seq(0,log(max(Y_mtx)+1),length.out = gridResolution))
-
-  P_signal_tmp = dlnorm(Y_nodes,
-                        rep(alphai_beta_g,each = length(Y_nodes)),
-                        rep(sqrt(sigma2_1g),each = length(Y_nodes)))
-  P_background_tmp = dnorm(Y_nodes,
-                           rep(mu_0i,each = length(Y_nodes)),
-                           rep(sqrt(sigma2_0i),each = length(Y_nodes)))
-  pi_prior_tmp = rep(pi_prior, each =length(Y_nodes))
-  pi_mtx_posterior_tmp = P_signal_tmp*pi_prior_tmp/(P_signal_tmp*pi_prior_tmp+P_background_tmp*(1-pi_prior_tmp))
-  #sum(is.na(pi_mtx_posterior_tmp)) # turn NA to 0, since we will cummax later
-  pi_mtx_posterior_tmp[is.na(pi_mtx_posterior_tmp)] = 0
-  pi_mtx_posterior_tmp = matrix(pi_mtx_posterior_tmp,nrow = length(Y_nodes))
-  #dim(pi_mtx_posterior_tmp)
-
-  Z_post_mono = apply(pi_mtx_posterior_tmp,2,function(z){
-    z = pi_mtx_posterior_tmp[,1]
-    unmatched = cummax(z)!=z
-    dipZ = min(z[unmatched])
-    if (length(which(z==dipZ))!=1 ) message("more than one dipZ")
-    z[1:which(z==dipZ)]= sapply(1:which(z==dipZ),function(z1) min(dipZ,z[z1]))
-    return(z)
-  })
-
-  end1 = findInterval(c(Y_mtx), Y_nodes) # indices of two end of the interval in
-  end2 = end1+1; end2[end2>length(Y_nodes)]=length(Y_nodes)
-  z1= Z_post_mono[matrix(c(end1,1:length(end1)),ncol = 2)]
-  z2 = Z_post_mono[matrix(c(end2,1:length(end1)),ncol = 2)]
-  x1= log(Y_nodes[end1])
-  x2= log(Y_nodes[end2])
-  z_mono = z2+(z1-z2)/(x1-x2)*(c(log(Y_mtx)-x2))
-  z_final = matrix(z_mono,nrow = nrow(Y_mtx))
-
-  return(z_final)
-}
-
-
 
 
 
