@@ -1,6 +1,6 @@
 
 parEst_itr = function(Y_mtx,pi_mtx = NULL,Z_mtx = NULL,
-                      EBrobust=F,adj_posterior=F,filterBackground  =F,
+                      EBrobust=F,filterBackground  =F,
                       approxSignalPar = F,
                       Beta_bayes = F, Beta_0_weight = F, Beta_kappa = 10,
                       shrinktoMean=F){
@@ -108,14 +108,6 @@ parEst_itr = function(Y_mtx,pi_mtx = NULL,Z_mtx = NULL,
   pi_mtx_posterior = P_signal*pi_prior/(P_signal*pi_prior+P_background*(1-pi_prior))
 
 
-  if (adj_posterior) {
-    # set upper bound for Z_hat according to alpha_i+beta_g
-    P_signal_bound = dlnorm(exp(alphai_beta_g),alphai_beta_g,sqrt(sigma2_1g))
-    P_background_bound = dnorm(exp(alphai_beta_g),mu_0i,sqrt(sigma2_0i))
-    pi_mtx_posterior_bound = P_signal_bound*pi_prior/(P_signal_bound*pi_prior+P_background_bound*(1-pi_prior))
-
-    pi_mtx_posterior = ifelse(log(Y_mtx)<alphai_beta_g,pi_mtx_posterior,pi_mtx_posterior_bound)
-  }
   if(filterBackground){
     # any count less than background mean +1.96*sigma is background
     pi_mtx_posterior = ifelse(Y_mtx<mu_0i+1.96*sqrt(sigma2_0i),0,pi_mtx_posterior)
@@ -127,7 +119,6 @@ parEst_itr = function(Y_mtx,pi_mtx = NULL,Z_mtx = NULL,
     alphai_beta_g=alphai_beta_g,sigma2_1g=sigma2_1g,mu_0i=mu_0i,sigma2_0i=sigma2_0i,
     var_eBayes=var_eBayes,s2_g=s2_g,df_g=df_g,
     pi_prior = pi_prior,m_hat=m_hat,S2_hat = S2_hat))
-
 
 }
 
