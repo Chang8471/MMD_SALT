@@ -112,7 +112,8 @@ parEst_itr = function(Y_mtx,pi_mtx = NULL,Z_mtx = NULL,
     pi_mtx_posterior=pi_mtx_posterior, beta=beta,
     alphai_beta_g=alphai_beta_g,sigma2_1g=sigma2_1g,mu_0i=mu_0i,sigma2_0i=sigma2_0i,
     var_eBayes=var_eBayes,s2_g=s2_g,df_g=df_g,
-    pi_prior = pi_prior,m_hat=m_hat,S2_hat = S2_hat))
+    pi_prior = pi_prior,m_hat=m_hat,S2_hat = S2_hat,
+    beta_g = beta[1:nrow(Y_mtx)],alpha_i = c(0,beta[(1+nrow(Y_mtx)):length(beta)])))
 
 }
 
