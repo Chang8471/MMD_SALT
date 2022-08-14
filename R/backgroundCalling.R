@@ -1,8 +1,7 @@
 
 parEst_itr = function(Y_mtx,pi_mtx = NULL,Z_mtx = NULL,
                       EBrobust=F,filterBackground  =F,
-                      Beta_bayes = F, Beta_0_weight = F, Beta_kappa = 10,
-                      shrinktoMean=F){
+                      Beta_bayes = F, Beta_0_weight = F, Beta_kappa = 10){
 
   # initialize and estimate pi_i
   if (!is.null(pi_mtx)){
