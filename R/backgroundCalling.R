@@ -1,23 +1,17 @@
 
 parEst_itr = function(Y_mtx,pi_mtx = NULL,Z_mtx = NULL,
                       EBrobust=F,returnPar = F,adj_posterior=F,filterBackground  =F,
-                      fixPiProportion = F,approxSignalPar = F,subtractBackground = F,
+                      approxSignalPar = F,subtractBackground = F,
                       Beta_bayes = F, Beta_0_weight = F, Beta_kappa = 10,
                       shrinktoMean=F){
-  # use the initial marginal pi_i, and do not update in iterations
-  if(fixPiProportion){
+  # initialize and estimate pi_i
+  if (!is.null(pi_mtx)){
+    Z_mtx = pi_mtx>.5
+    pi_i = colMeans(pi_mtx)
+  }else if (!is.null(Z_mtx)){# only initial calls is provided
     pi_i = colMeans(Z_mtx)
-    # but rough call is still made according to last round's posterior Z
-    if (!is.null(pi_mtx)) Z_mtx = pi_mtx>.5
-  }else{# update pi_i, each iteration
-    # initialize and estimate pi_i
-    if (!is.null(pi_mtx)){
-      Z_mtx = pi_mtx>.5
-      pi_i = colMeans(pi_mtx)
-    }else if (!is.null(Z_mtx)){# only initial calls is provided
-      pi_i = colMeans(Z_mtx)
-    }
   }
+
 
   # check if all elements are provided
   if (is.null(Z_mtx)&is.null(pi_mtx)){ message("error: Z or pi mtx not correctly provided");return(NULL)}
