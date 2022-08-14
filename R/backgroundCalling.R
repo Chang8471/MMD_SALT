@@ -1,6 +1,6 @@
 
 parEst_itr = function(Y_mtx,pi_mtx = NULL,Z_mtx = NULL,
-                      EBrobust=F,returnPar = F,adj_posterior=F,filterBackground  =F,
+                      EBrobust=F,adj_posterior=F,filterBackground  =F,
                       approxSignalPar = F,
                       Beta_bayes = F, Beta_0_weight = F, Beta_kappa = 10,
                       shrinktoMean=F){
@@ -122,12 +122,12 @@ parEst_itr = function(Y_mtx,pi_mtx = NULL,Z_mtx = NULL,
   }
 
   # return
-  if(returnPar) return(list(
+  return(list(
     pi_mtx_posterior=pi_mtx_posterior, beta=beta,
     alphai_beta_g=alphai_beta_g,sigma2_1g=sigma2_1g,mu_0i=mu_0i,sigma2_0i=sigma2_0i,
     var_eBayes=var_eBayes,s2_g=s2_g,df_g=df_g,
     pi_prior = pi_prior,m_hat=m_hat,S2_hat = S2_hat))
-  return(list(pi_mtx_posterior=pi_mtx_posterior, beta=beta))
+
 
 }
 
