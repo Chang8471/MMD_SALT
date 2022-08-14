@@ -47,9 +47,8 @@ parEst_itr = function(Y_mtx,pi_mtx = NULL,Z_mtx = NULL,
   lm_fitted_tmp = biglm(logY_vec~x_gene+x_sample-1,
                         data = data.frame(logY_vec,x_gene,x_sample))
 
-  beta = coef(lm_fitted_tmp) # estimated beta
-  if(shrinktoMean) {beta[is.na(beta)] = mean(beta[1:nrow(Y_mtx)],na.rm = T)
-  }else   beta[is.na(beta)] = min(beta[1:nrow(Y_mtx)],na.rm = T)####genes never above background???
+  beta = coef(lm_fitted_tmp) # estimated beta_g
+  beta[is.na(beta)] = mean(beta[1:nrow(Y_mtx)],na.rm = T) # genes never above background, get mean of all other beta_g
 
   logY_fitted = x_mtx %*% cbind(beta) # fitted
 
