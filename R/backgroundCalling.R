@@ -1,4 +1,37 @@
 
+#' Function to estimate parameters of mixed model
+#'
+#' @description Estimate parameters for background and signal components, using observed counts and previous label of noise and signal. Then calculate posterior likelihood of presence of signal in observed counts.
+#'
+#' @param Y_mtx Matrix of raw counts, gene by sample
+#' @param pi_mtx Matrix of likelihood of signal, same dimensions as ``Y_mtx``.
+#' @param Z_mtx Matrix of binary labels, same dimensions as ``Y_mtx``. 0 as in background, and 1 for signal. Will be ignored if ``pi_mtx`` is provided. Must be provided if ``pi_mtx`` is NULL.
+#' @param EBrobust Boolean indicator for ``EBrobust`` option for ``squeezeVar`` function from limma package, used for estimating signal component variance with Empirical Bayes. Default set to F.
+#' @param filterBackground Boolean indicator for only consider counts that are more than 2 SD away from background mean to possibly have signal. Default set to F.
+#' @param Beta_bayes Boolean indicator to use bayesian prior for ``beta_g`` estimation, default set to F.
+#' @param Beta_0_weight Boolean Boolean indicator to use weighted mean to estimate bayesian prior mean for ``beta_g``, default set to F.
+#' @param Beta_kappa prior degree of freedom for ``beta_g`` estimation. Default 10.
+#'
+#' @return a list of estimated parameters
+#' \itemize{
+#'   \item `pi_mtx_posterior` posterior likelihood of observing signal, same dimensions as ``Y_mtx``
+#'   \item `beta` raw estimated coefficient from the linear model fitted.
+#'   \item `alphai_beta_g`
+#'   \item `sigma2_1g`
+#'   \item `mu_0i`
+#'   \item `sigma2_0i`
+#'   \item `var_eBayes`
+#'   \item `s2_g`
+#'   \item `df_g`
+#'   \item `pi_prior`
+#'   \item `m_hat`
+#'   \item `S2_hat`
+#'   \item `beta_g`
+#'   \item `alpha_i`
+#' }
+#' @export
+#'
+#' @examples
 parEst_itr = function(Y_mtx,pi_mtx = NULL,Z_mtx = NULL,
                       EBrobust=F,filterBackground  =F,
                       Beta_bayes = F, Beta_0_weight = F, Beta_kappa = 10){
