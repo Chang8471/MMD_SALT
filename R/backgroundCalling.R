@@ -28,6 +28,7 @@ parEst_itr = function(Y_mtx,pi_mtx = NULL,Z_mtx = NULL,
   logY_mtx = log(Y_mtx-mu_0i)
   #if(any(is.na(logY_mtx)&Z_mtx)) message("error: background subtraction produce NA after log transformation")
   logY_mtx[Z_mtx==0] = NA # turn identified background to NA
+  logY_mtx[is.infinite(logY_mtx)] = NA
 
   x_gene = factor(rep(rownames(logY_mtx),ncol(logY_mtx)),
                   levels=rownames(logY_mtx))
