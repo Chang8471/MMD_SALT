@@ -1,7 +1,6 @@
 
 parEst_itr = function(Y_mtx,pi_mtx = NULL,Z_mtx = NULL,
                       EBrobust=F,filterBackground  =F,
-                      approxSignalPar = F,
                       Beta_bayes = F, Beta_0_weight = F, Beta_kappa = 10,
                       shrinktoMean=F){
 
@@ -92,16 +91,12 @@ parEst_itr = function(Y_mtx,pi_mtx = NULL,Z_mtx = NULL,
 
   }
   ############ posterior f(z=1|Y)
-  P_signal = dlnorm(Y_mtx,alphai_beta_g,sqrt(sigma2_1g))
-  m_hat=NULL
-  S2_hat = NULL
-  if (approxSignalPar){
-    EY = mu_0i +exp(alphai_beta_g+sigma2_1g/2)
-    VarY = sigma2_0i+(exp(sigma2_1g)-1)*exp(2*alphai_beta_g+sigma2_1g)
-    S2_hat = log(VarY/(EY)^2+1)
-    m_hat = log(EY)-S2_hat/2
-    P_signal = dlnorm(Y_mtx,m_hat,sqrt(S2_hat))
-  }
+  EY = mu_0i +exp(alphai_beta_g+sigma2_1g/2)
+  VarY = sigma2_0i+(exp(sigma2_1g)-1)*exp(2*alphai_beta_g+sigma2_1g)
+  S2_hat = log(VarY/(EY)^2+1)
+  m_hat = log(EY)-S2_hat/2
+  P_signal = dlnorm(Y_mtx,m_hat,sqrt(S2_hat))
+
   P_background = dnorm(Y_mtx,mu_0i,sqrt(sigma2_0i))
 
   pi_prior = matrix(pi_i,ncol = ncol(Y_mtx), nrow = nrow(Y_mtx), byrow = T)
