@@ -151,6 +151,24 @@ parEst_itr = function(Y_mtx,pi_mtx = NULL,Z_mtx = NULL,
 
 }
 
+#' Forcing monotonicity
+#'
+#' @description force posterior likelihood of signal only increase as observed count increases
+#'
+#' @param Y_mtx Matrix of raw counts, gene by sample
+#' @param useparEst_itr_out boolean indicator to use output object from ``parEst_itr`` function
+#' @param parEst_itr_out if ``useparEst_itr_out`` is T, then provide the output object from ``parEst_itr`` function
+#' @param gridResolution number of grid nodes to generate for the step function for posterior likelihood
+#' @param alphai_beta_g mandatory parameter if ``useparEst_itr_out`` is F, will be ignored otherwise. Matrix of signal mean, after log normal approximation. Same dimensions as ``Y_mtx``.
+#' @param sigma2_1g mandatory parameter if ``useparEst_itr_out`` is F, will be ignored otherwise. Matrix of signal variance, after log normal approximation. Same dimensions as ``Y_mtx``.
+#' @param mu_0i mandatory parameter if ``useparEst_itr_out`` is F, will be ignored otherwise. Matrix of background mean. Same dimensions as ``Y_mtx``.
+#' @param sigma2_0i mandatory parameter if ``useparEst_itr_out`` is F, will be ignored otherwise. Matrix of background variance. Same dimensions as ``Y_mtx``.
+#' @param pi_prior mandatory parameter if ``useparEst_itr_out`` is F, will be ignored otherwise. Matrix of prior likelihood of signal. Same dimensions as ``Y_mtx``.
+#'
+#' @return Matrix of posterior likelihood, same dimensions as ``Y_mtx``.
+#' @export
+#'
+#' @examples
 forceMono = function(Y_mtx,useparEst_itr_out,  parEst_itr_out=NULL,gridResolution=500,
                      alphai_beta_g=NULL,sigma2_1g = NULL,mu_0i=NULL,sigma2_0i=NULL,pi_prior=NULL){
 
