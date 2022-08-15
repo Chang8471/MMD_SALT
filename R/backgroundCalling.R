@@ -15,19 +15,19 @@
 #' @return a list of estimated parameters
 #' \itemize{
 #'   \item `pi_mtx_posterior` posterior likelihood of observing signal, same dimensions as ``Y_mtx``
-#'   \item `beta` raw estimated coefficient from the linear model fitted.
-#'   \item `alphai_beta_g`
-#'   \item `sigma2_1g`
-#'   \item `mu_0i`
-#'   \item `sigma2_0i`
-#'   \item `var_eBayes`
-#'   \item `s2_g`
-#'   \item `df_g`
-#'   \item `pi_prior`
-#'   \item `m_hat`
-#'   \item `S2_hat`
-#'   \item `beta_g`
-#'   \item `alpha_i`
+#'   \item `beta` raw estimated coefficient from the linear model fitted. Use   ``beta_g = beta[1:nrow(Y_mtx)];alpha_i = c(0,beta[(1+nrow(Y_mtx)):length(beta)])`` to get parameters
+#'   \item `alphai_beta_g` matrix of log of expected signal, same dimensions as ``Y_mtx``
+#'   \item `sigma2_1g` matrix of signal's variance, same dimensions as ``Y_mtx``. Each column is the same
+#'   \item `mu_0i` matrix of expected background mean , same dimensions as ``Y_mtx``. Each row is the same
+#'   \item `sigma2_0i` matrix of background variance , same dimensions as ``Y_mtx``. Each row is the same
+#'   \item `var_eBayes` EBayes fit output from ``squeezeVar`` function
+#'   \item `s2_g` observed gene variance of signals, input for ``squeezeVar`` function
+#'   \item `df_g` degree of freedom for each ``s2_g``, input for ``squeezeVar`` function
+#'   \item `pi_prior` prior probability of observing signal in a sample. Estimated from column mean of ``pi_mtx``. If ``pi_mtx`` is not given then use prevalence of signal according to ``Z_mtx``.
+#'   \item `m_hat`  mean of the log normal approximation of sum of background and signal components
+#'   \item `S2_hat` variance of the log normal approximation of sum of background and signal components
+#'   \item `beta_g` final beta_g esimation
+#'   \item `alpha_i` final alpha_i estimation
 #' }
 #' @export
 #'
