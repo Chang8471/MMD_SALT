@@ -18,37 +18,37 @@ parEst_itr(
 \arguments{
 \item{Y_mtx}{Matrix of raw counts, gene by sample}
 
-\item{pi_mtx}{Matrix of likelihood of signal, same dimensions as ``Y_mtx``.}
+\item{pi_mtx}{Matrix of likelihood of signal, same dimensions as \code{Y_mtx}.}
 
-\item{Z_mtx}{Matrix of binary labels, same dimensions as ``Y_mtx``. 0 as in background, and 1 for signal. Will be ignored if ``pi_mtx`` is provided. Must be provided if ``pi_mtx`` is NULL.}
+\item{Z_mtx}{Matrix of binary labels, same dimensions as \code{Y_mtx}. 0 as in background, and 1 for signal. Will be ignored if \code{pi_mtx} is provided. Must be provided if \code{pi_mtx} is NULL.}
 
-\item{EBrobust}{Boolean indicator for ``EBrobust`` option for ``squeezeVar`` function from limma package, used for estimating signal component variance with Empirical Bayes. Default set to F.}
+\item{EBrobust}{Boolean indicator for \code{EBrobust} option for \code{squeezeVar} function from limma package, used for estimating signal component variance with Empirical Bayes. Default set to F.}
 
 \item{filterBackground}{Boolean indicator for only consider counts that are more than 2 SD away from background mean to possibly have signal. Default set to F.}
 
-\item{Beta_bayes}{Boolean indicator to use bayesian prior for ``beta_g`` estimation, default set to F.}
+\item{Beta_bayes}{Boolean indicator to use bayesian prior for \code{beta_g} estimation, default set to F.}
 
-\item{Beta_0_weight}{Boolean Boolean indicator to use weighted mean to estimate bayesian prior mean for ``beta_g``, default set to F.}
+\item{Beta_0_weight}{Boolean Boolean indicator to use weighted mean to estimate bayesian prior mean for \code{beta_g}, default set to F.}
 
-\item{Beta_kappa}{prior degree of freedom for ``beta_g`` estimation. Default 10.}
+\item{Beta_kappa}{prior degree of freedom for \code{beta_g} estimation. Default 10.}
 }
 \value{
 a list of estimated parameters
 \itemize{
-  \item `pi_mtx_posterior` posterior likelihood of observing signal, same dimensions as ``Y_mtx``
-  \item `beta` raw estimated coefficient from the linear model fitted. Use   ``beta_g = beta[1:nrow(Y_mtx)];alpha_i = c(0,beta[(1+nrow(Y_mtx)):length(beta)])`` to get parameters
-  \item `alphai_beta_g` matrix of log of expected signal, same dimensions as ``Y_mtx``
-  \item `sigma2_1g` matrix of signal's variance, same dimensions as ``Y_mtx``. Each column is the same
-  \item `mu_0i` matrix of expected background mean , same dimensions as ``Y_mtx``. Each row is the same
-  \item `sigma2_0i` matrix of background variance , same dimensions as ``Y_mtx``. Each row is the same
-  \item `var_eBayes` EBayes fit output from ``squeezeVar`` function
-  \item `s2_g` observed gene variance of signals, input for ``squeezeVar`` function
-  \item `df_g` degree of freedom for each ``s2_g``, input for ``squeezeVar`` function
-  \item `pi_prior` prior probability of observing signal in a sample. Estimated from column mean of ``pi_mtx``. If ``pi_mtx`` is not given then use prevalence of signal according to ``Z_mtx``.
-  \item `m_hat`  mean of the log normal approximation of sum of background and signal components
-  \item `S2_hat` variance of the log normal approximation of sum of background and signal components
-  \item `beta_g` final beta_g esimation
-  \item `alpha_i` final alpha_i estimation
+\item \code{pi_mtx_posterior} posterior likelihood of observing signal, same dimensions as \code{Y_mtx}
+\item \code{beta} raw estimated coefficient from the linear model fitted. Use   \verb{beta_g = beta[1:nrow(Y_mtx)];alpha_i = c(0,beta[(1+nrow(Y_mtx)):length(beta)])} to get parameters
+\item \code{alphai_beta_g} matrix of log of expected signal, same dimensions as \code{Y_mtx}
+\item \code{sigma2_1g} matrix of signal's variance, same dimensions as \code{Y_mtx}. Each column is the same
+\item \code{mu_0i} matrix of expected background mean , same dimensions as \code{Y_mtx}. Each row is the same
+\item \code{sigma2_0i} matrix of background variance , same dimensions as \code{Y_mtx}. Each row is the same
+\item \code{var_eBayes} EBayes fit output from \code{squeezeVar} function
+\item \code{s2_g} observed gene variance of signals, input for \code{squeezeVar} function
+\item \code{df_g} degree of freedom for each \code{s2_g}, input for \code{squeezeVar} function
+\item \code{pi_prior} prior probability of observing signal in a sample. Estimated from column mean of \code{pi_mtx}. If \code{pi_mtx} is not given then use prevalence of signal according to \code{Z_mtx}.
+\item \code{m_hat}  mean of the log normal approximation of sum of background and signal components
+\item \code{S2_hat} variance of the log normal approximation of sum of background and signal components
+\item \code{beta_g} final beta_g esimation
+\item \code{alpha_i} final alpha_i estimation
 }
 }
 \description{

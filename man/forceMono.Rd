@@ -19,24 +19,24 @@ forceMono(
 \arguments{
 \item{Y_mtx}{Matrix of raw counts, gene by sample}
 
-\item{useparEst_itr_out}{boolean indicator to use output object from ``parEst_itr`` function}
+\item{useparEst_itr_out}{boolean indicator to use output object from \code{parEst_itr} function}
 
-\item{parEst_itr_out}{if ``useparEst_itr_out`` is T, then provide the output object from ``parEst_itr`` function}
+\item{parEst_itr_out}{if \code{useparEst_itr_out} is T, then provide the output object from \code{parEst_itr} function}
 
 \item{gridResolution}{number of grid nodes to generate for the step function for posterior likelihood}
 
-\item{alphai_beta_g}{mandatory parameter if ``useparEst_itr_out`` is F, will be ignored otherwise. Matrix of signal mean, after log normal approximation. Same dimensions as ``Y_mtx``.}
+\item{alphai_beta_g}{mandatory parameter if \code{useparEst_itr_out} is F, will be ignored otherwise. Matrix of signal mean, after log normal approximation. Same dimensions as \code{Y_mtx}.}
 
-\item{sigma2_1g}{mandatory parameter if ``useparEst_itr_out`` is F, will be ignored otherwise. Matrix of signal variance, after log normal approximation. Same dimensions as ``Y_mtx``.}
+\item{sigma2_1g}{mandatory parameter if \code{useparEst_itr_out} is F, will be ignored otherwise. Matrix of signal variance, after log normal approximation. Same dimensions as \code{Y_mtx}.}
 
-\item{mu_0i}{mandatory parameter if ``useparEst_itr_out`` is F, will be ignored otherwise. Matrix of background mean. Same dimensions as ``Y_mtx``.}
+\item{mu_0i}{mandatory parameter if \code{useparEst_itr_out} is F, will be ignored otherwise. Matrix of background mean. Same dimensions as \code{Y_mtx}.}
 
-\item{sigma2_0i}{mandatory parameter if ``useparEst_itr_out`` is F, will be ignored otherwise. Matrix of background variance. Same dimensions as ``Y_mtx``.}
+\item{sigma2_0i}{mandatory parameter if \code{useparEst_itr_out} is F, will be ignored otherwise. Matrix of background variance. Same dimensions as \code{Y_mtx}.}
 
-\item{pi_prior}{mandatory parameter if ``useparEst_itr_out`` is F, will be ignored otherwise. Matrix of prior likelihood of signal. Same dimensions as ``Y_mtx``.}
+\item{pi_prior}{mandatory parameter if \code{useparEst_itr_out} is F, will be ignored otherwise. Matrix of prior likelihood of signal. Same dimensions as \code{Y_mtx}.}
 }
 \value{
-Matrix of posterior likelihood, same dimensions as ``Y_mtx``.
+Matrix of posterior likelihood, same dimensions as \code{Y_mtx}.
 }
 \description{
 force posterior likelihood of signal only increase as observed count increases
