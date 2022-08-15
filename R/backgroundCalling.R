@@ -78,15 +78,16 @@ parEst_itr = function(Y_mtx,pi_mtx = NULL,Z_mtx = NULL,
   lm_fitted_tmp = biglm(logY_vec~x_gene+x_sample-1,
                         data = data.frame(logY_vec,x_gene,x_sample))
 
-  beta = coef(lm_fitted_tmp) # estimated beta_g
+  beta = coef(lm_fitted_tmp) # estimated beta_g and alpha_i vector
   beta[is.na(beta)] = mean(beta[1:nrow(Y_mtx)],na.rm = T) # genes never above background, get mean of all other beta_g
-
+  beta_g = beta[1:nrow(Y_mtx)]
+  alpha_i = c(0,beta[(1+nrow(Y_mtx)):length(beta)])
   logY_fitted = x_mtx %*% cbind(beta) # fitted
 
   # above background mean matrix
   alphai_beta_g = matrix(0,nrow = nrow(Y_mtx),ncol=ncol(Y_mtx))
-  alphai_beta_g = sweep(alphai_beta_g,1,beta[1:nrow(Y_mtx)],"+")
-  alphai_beta_g = sweep(alphai_beta_g,2,c(0,beta[(1+nrow(Y_mtx)):length(beta)]),"+")
+  alphai_beta_g = sweep(alphai_beta_g,1,beta_g,"+")
+  alphai_beta_g = sweep(alphai_beta_g,2,alpha_i,"+")
 
   # residual for each observation
   resid = logY_vec - logY_fitted
@@ -96,16 +97,16 @@ parEst_itr = function(Y_mtx,pi_mtx = NULL,Z_mtx = NULL,
   df_g = tapply(resid, x_gene, length)
   df_g[is.na(df_g)]=0 # not detected genes
 
-  var_eBayes = squeezeVar(s2_g,df_g, beta[1:nrow(Y_mtx)], robust = EBrobust)
+  var_eBayes = squeezeVar(s2_g,df_g, beta_g, robust = EBrobust)
   sigma2_1g = matrix(var_eBayes$var.post,ncol = ncol(Y_mtx),nrow = nrow(Y_mtx))
 
   # add bayes prior on beta_g
   if(Beta_bayes){
     # estimate beta_g
-    beta_tmp = coef(lm_fitted_tmp)[1:nrow(Y_mtx)]
+    beta_tmp = beta_g
     beta_0 = mean(beta_tmp,na.rm = T)
     if(Beta_0_weight) beta_0= sum(beta_tmp*df_g,na.rm = T)/sum(df_g)
-    beta_g_post = (Beta_kappa*beta_0+df_g*beta[1:nrow(Y_mtx)])/(Beta_kappa+df_g)
+    beta_g = (Beta_kappa*beta_0+df_g*beta_g)/(Beta_kappa+df_g)
 
     # estimate sigma^2_g
     tmpsq = (beta_tmp-beta_0)^2
@@ -113,26 +114,26 @@ parEst_itr = function(Y_mtx,pi_mtx = NULL,Z_mtx = NULL,
     sigma2_1g1 = sigma2_1g[,1]+(Beta_kappa*df_g/(df_g+Beta_kappa)*tmpsq)/(var_eBayes$df.prior+df_g)
 
 
-    beta[1:nrow(Y_mtx)] = beta_g_post
     # update Expectation matrix
     alphai_beta_g = matrix(0,nrow = nrow(Y_mtx),ncol=ncol(Y_mtx))
-    alphai_beta_g = sweep(alphai_beta_g,1,beta[1:nrow(Y_mtx)],"+")
-    alphai_beta_g = sweep(alphai_beta_g,2,c(0,beta[(1+nrow(Y_mtx)):length(beta)]),"+")
+    alphai_beta_g = sweep(alphai_beta_g,1,beta_g,"+")
+    alphai_beta_g = sweep(alphai_beta_g,2,alpha_i,"+")
     # update variance matrix
     sigma2_1g = matrix(sigma2_1g1,ncol = ncol(Y_mtx),nrow = nrow(Y_mtx))
 
   }
-  ############ posterior f(z=1|Y)
+
+  ############ posterior P(signal|Y)
+  # approximate sum of background and signal component with a logNormal distribution, parameter estimation with MoM
   EY = mu_0i +exp(alphai_beta_g+sigma2_1g/2)
   VarY = sigma2_0i+(exp(sigma2_1g)-1)*exp(2*alphai_beta_g+sigma2_1g)
   S2_hat = log(VarY/(EY)^2+1)
   m_hat = log(EY)-S2_hat/2
-  P_signal = dlnorm(Y_mtx,m_hat,sqrt(S2_hat))
 
-  P_background = dnorm(Y_mtx,mu_0i,sqrt(sigma2_0i))
-
-  pi_prior = matrix(pi_i,ncol = ncol(Y_mtx), nrow = nrow(Y_mtx), byrow = T)
-  pi_mtx_posterior = P_signal*pi_prior/(P_signal*pi_prior+P_background*(1-pi_prior))
+  P_signal = dlnorm(Y_mtx,m_hat,sqrt(S2_hat)) # P(signal)
+  P_background = dnorm(Y_mtx,mu_0i,sqrt(sigma2_0i)) # P(background)
+  pi_prior = matrix(pi_i,ncol = ncol(Y_mtx), nrow = nrow(Y_mtx), byrow = T) # prior of p signal
+  pi_mtx_posterior = P_signal*pi_prior/(P_signal*pi_prior+P_background*(1-pi_prior)) # posterior
 
 
   if(filterBackground){
@@ -146,7 +147,7 @@ parEst_itr = function(Y_mtx,pi_mtx = NULL,Z_mtx = NULL,
     alphai_beta_g=alphai_beta_g,sigma2_1g=sigma2_1g,mu_0i=mu_0i,sigma2_0i=sigma2_0i,
     var_eBayes=var_eBayes,s2_g=s2_g,df_g=df_g,
     pi_prior = pi_prior,m_hat=m_hat,S2_hat = S2_hat,
-    beta_g = beta[1:nrow(Y_mtx)],alpha_i = c(0,beta[(1+nrow(Y_mtx)):length(beta)])))
+    beta_g = beta_g,alpha_i = alpha_i))
 
 }
 
