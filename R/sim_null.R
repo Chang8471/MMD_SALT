@@ -1,5 +1,37 @@
 
 
+#' Simulate NanoString nCounter data with from null model
+#'
+#' @description simulate parameter and data, with potentially varying prior probability of signal in all samples
+#'
+#' @param nEndogenous number of endogenous probes, default = 800
+#' @param nPosControl number of positive control probes, default = 10
+#' @param nNegControl number of negative control probes, default = 5
+#' @param nSample total number of samples, default = 500
+#' @param alwaysOnGenes for the endogenous probes, set certain amount always expressed in all samples, default = 0
+#' @param fixedBackground boolean indicator, if true, all samples will share the same background mean and variance parameters
+#' @param d0 prior degree of freedom for simulating signal variance
+#' @param alpha_Offset a numerical value to offset all alpha_i, the larger the further away all signals will be from the noise
+#'
+#' @return a list of data and simulated true parameters
+#'
+#' \itemize{
+#' \item `Y_mtx` a matrix of all observed counts for endogenous probes. Probes by samples
+#' \item `Z_mtx` a matrix of true labels for endogenous probes, 0 for noise, 1 for signal, same dimensions as `Y_mtx`
+#' \item `Neg_control`  a matrix of all observed counts for Negative control probes. Probes by sample
+#' \item `Pos_control`  a matrix of all observed counts for Positive control probes. Probes by sample
+#' \item `pi_i` vector of simulated sample marginal prior probabilty of observing signal
+#' \item `mu_0i` vector simulated background mean
+#' \item `sigma_0i` vector of simulate background variance
+#' \item `alpha_i` vector of simulated sample contribution to signal mean, offset included
+#' \item `beta_g` vector of simulated probe contribution to signal mean
+#' \item `alpha_i_beta_g` matrix of signal mean, same dimensions as `Y_mtx`
+#' \item `sigma2_10` vector of signal variance prior
+#' \item `sigma2_1g` vector of simulated signal variance
+#' }
+#' @export
+#'
+#' @examples
 simData = function(nEndogenous = 800, nPosControl = 10, nNegControl = 5,
                    nSample = 500, alwaysOnGenes = 0,
                    fixedBackground = T, d0 = 50, alpha_Offset = 2){
@@ -53,6 +85,44 @@ simData = function(nEndogenous = 800, nPosControl = 10, nNegControl = 5,
 }
 
 
+
+#' Simulate from null model, with fixed proportion of endogenous probes having signal
+#'
+#' @description Simulate parameters and data. While all samples have same proportion of probes having signal, it is a different subset for each sample.
+#'
+#' @param nEndogenous number of endogenous probes, default = 800
+#' @param nPosControl number of positive control probes, default = 10
+#' @param nNegControl number of negative control probes, default = 5
+#' @param nSample total number of samples, default = 500
+#' @param alwaysOnGenes for the endogenous probes, set certain amount always expressed in all samples, default = 0
+#' @param fixedBackground boolean indicator, if true, all samples will share the same background mean and variance parameters
+#' @param d0 prior degree of freedom for simulating signal variance
+#' @param alpha_Offset a numerical value to offset all alpha_i, the larger the further away all signals will be from the noise
+#' @param seed.ab seed for simulating parameters for signal components
+#' @param seed.sim seed for simulating background parameters, Z and Y
+#' @param expressPercent fixed proportion of endogenous probes expressed in each sample
+#' @param alpha_shape1 first parameter to simulated alpha_i from rbeta()
+#' @param alpha_shape2 second parameter to simulated alpha_i from rbeta()
+#'
+#' @return a list of data and simulated true parameters
+#'
+#' \itemize{
+#' \item `Y_mtx` a matrix of all observed counts for endogenous probes. Probes by samples
+#' \item `Z_mtx` a matrix of true labels for endogenous probes, 0 for noise, 1 for signal, same dimensions as `Y_mtx`
+#' \item `Neg_control`  a matrix of all observed counts for Negative control probes. Probes by sample
+#' \item `Pos_control`  a matrix of all observed counts for Positive control probes. Probes by sample
+#' \item `pi_i` true prior probability of signal in a sample, same as `expressPercent` input parameter
+#' \item `mu_0i` vector simulated background mean
+#' \item `sigma_0i` vector of simulate background variance
+#' \item `alpha_i` vector of simulated sample contribution to signal mean, offset included
+#' \item `beta_g` vector of simulated probe contribution to signal mean
+#' \item `alpha_i_beta_g` matrix of signal mean, same dimensions as `Y_mtx`
+#' \item `sigma2_10` vector of signal variance prior
+#' \item `sigma2_1g` vector of simulated signal variance
+#' }
+#' @export
+#'
+#' @examples
 simData_fixSigProp = function(nEndogenous = 800,
                               nPosControl = 10, nNegControl = 10,
                               nSample = 500, alwaysOnGenes = 0,
@@ -62,8 +132,6 @@ simData_fixSigProp = function(nEndogenous = 800,
 
 
 
-
-  inv.logit = function(x){1/(exp(-x)+1)}
   nGene = nEndogenous+nPosControl+nNegControl
 
 
