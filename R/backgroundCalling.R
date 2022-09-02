@@ -205,7 +205,19 @@ forceMono = function(Y_mtx,useparEst_itr_out,  parEst_itr_out=NULL,gridResolutio
   pi_mtx_posterior_tmp = matrix(pi_mtx_posterior_tmp,nrow = length(Y_nodes))
   #dim(pi_mtx_posterior_tmp)
 
-  Z_post_mono = apply(pi_mtx_posterior_tmp,2,cummax) # find z that are monotonic
+  #### give the lower end same posterior likelihood as observing background mean
+  LowerEnd = sapply(c(mu_0i),function(mu0) Y_nodes<=mu0)
+  # background mean, posterior likelihood
+  P_signal_l = dlnorm(rep(mu_0i[1,],each=nrow(alphai_beta_g)), c(alphai_beta_g), c(sqrt(sigma2_1g)))
+  P_background_l = dnorm(rep(mu_0i[1,],each=nrow(alphai_beta_g)),c(mu_0i), c(sqrt(sigma2_0i)))
+  pi_prior_l = rep(pi_prior[1,],each=nrow(alphai_beta_g))
+  pi_mtx_posterior_l = P_signal_l*pi_prior_l/(P_signal_l*pi_prior_l+P_background_l*(1-pi_prior_l))
+  # replace low end
+  pi_mtx_posterior_tmp2 = pi_mtx_posterior_tmp*(1-LowerEnd)+sweep(LowerEnd,2,pi_mtx_posterior_l,"*")
+
+
+  ###### find z that are monotonic
+  Z_post_mono = apply(pi_mtx_posterior_tmp2,2,cummax)
   #dim(Z_post_mono)
 
   end1 = findInterval(c(Y_mtx), Y_nodes) # indices of two end of the interval in
