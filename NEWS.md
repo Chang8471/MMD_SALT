@@ -4,6 +4,10 @@
 
 * changing monotonocity function, making low end having the same posterior likelihood as background mean
 
+## Major fix
+
+* fixed `call_Z_normNegCtrl` function not using the given Ymtx
+
 
 # Version 0.0.1
 

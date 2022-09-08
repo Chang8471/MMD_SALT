@@ -52,7 +52,7 @@ call_Z_maxNegCtrl = function(Ymtx, Neg_control){
 call_Z_normNegCtrl = function(Ymtx, Neg_control){
   mu_tmp = colMeans(Neg_control)
   sd_tmp = apply(Neg_control,2,sd)
-  Z_mtx_est = t(pnorm(t(Y_mtx),mu_tmp,sd_tmp,lower.tail = F))
+  Z_mtx_est = t(pnorm(t(Ymtx),mu_tmp,sd_tmp,lower.tail = F))
   return(Z_mtx_est)
 }
 
