@@ -1,8 +1,15 @@
+# Version 0.0.3
+
+## Major changes
+
+* add option to default calling to return z score other than p.value
+
 # Version 0.0.2
 
 ## Major changes
 
 * changing monotonocity function, making low end having the same posterior likelihood as background mean
+
 
 ## Major fix
 
