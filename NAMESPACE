@@ -4,6 +4,7 @@ import(limma)
 import(biglm)
 
 export(call_BG_wNegCtrl)
+export(call_BG_wNegCtrl_Zscore)
 export(forceMono)
 export(inv.logit)
 export(logit)
