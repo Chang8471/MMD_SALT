@@ -45,7 +45,7 @@ call_BG_wNegCtrl_Zscore = function(Ymtx, Neg_control, method, binary=NULL){
   }else if (method == "logNorm"){
     Z_mtx = call_Z_logNormNegCtrl(Ymtx, Neg_control,zScore = T)
   }
-  if (binary) return(Z_mtx>binary)
+  if (!is.null(binary)) return(Z_mtx>binary)
   else return(Z_mtx)
 }
 
