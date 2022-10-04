@@ -34,14 +34,15 @@
 #' @examples
 simData = function(nEndogenous = 800, nPosControl = 10, nNegControl = 5,
                    nSample = 500, alwaysOnGenes = 0,
-                   fixedBackground = T, d0 = 50, beta_offset = 0){
+                   fixedBackground = T, d0 = 50, beta_offset = 0,
+                   seed.par=NULL, seed.data=NULL){
 
 
   nGene = nEndogenous+nPosControl+nNegControl
 
 
   # parameters for signal component
-  set.seed(seed.ab)
+  if(seed.par) set.seed(seed.par)
   alpha_i = rnorm(nSample,0,.1)
   beta_g = rnorm(nGene,3.4,2/3)+ beta_offset+mean(alpha_i)
   alpha_i = alpha_i-mean(alpha_i)
@@ -53,16 +54,13 @@ simData = function(nEndogenous = 800, nPosControl = 10, nNegControl = 5,
   alphai_beta_g = sweep(alphai_beta_g,1,beta_g,"+")
   alphai_beta_g = sweep(alphai_beta_g,2,alpha_i,"+")
 
-
-  #set.seed(seed.sim)
   # background parameters
   mu_0i = rlnorm(nSample, 2.43,.44)
   if (fixedBackground) mu_0i = rep(20,nSample)
   sigma_0i = rnorm(nSample, mu_0i*exp(-.9),.03*mu_0i)
-  #sigma_0i[sigma_0i<1] = 1
-
 
   # Z_gi, fix a proportion of genes expressed in each sample
+  if(seed.data) set.seed(seed.data)
   Z_mtx = matrix(0,nGene,nSample)
   tmp = rep(0,nEndogenous-alwaysOnGenes)
   tmp[1:floor(expressPercent*(nEndogenous-alwaysOnGenes))]=1
