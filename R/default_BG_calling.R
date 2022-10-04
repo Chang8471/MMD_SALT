@@ -41,9 +41,9 @@ call_BG_wNegCtrl_Zscore = function(Ymtx, Neg_control, method, binary=NULL){
   if (method == "max"){
     return(call_Z_maxNegCtrl(Ymtx, Neg_control))
   }else if (method == "norm"){
-    Z_mtx = call_Z_normNegCtrl(Ymtx, Neg_control)
+    Z_mtx = call_Z_normNegCtrl(Ymtx, Neg_control,zScore = T)
   }else if (method == "logNorm"){
-    Z_mtx = call_Z_logNormNegCtrl(Ymtx, Neg_control)
+    Z_mtx = call_Z_logNormNegCtrl(Ymtx, Neg_control,zScore = T)
   }
   if (binary) return(Z_mtx>binary)
   else return(Z_mtx)
