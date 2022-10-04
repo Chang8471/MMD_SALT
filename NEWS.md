@@ -1,3 +1,11 @@
+# Version 0.0.4
+
+## Major changes
+
+* change simulation setup: lower background component, center alpha_i
+
+* change in parameter estimation: alpha_i constrain sum to 0
+
 # Version 0.0.3
 
 ## Major changes
