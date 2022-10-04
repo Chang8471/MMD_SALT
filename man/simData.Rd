@@ -12,7 +12,9 @@ simData(
   alwaysOnGenes = 0,
   fixedBackground = T,
   d0 = 50,
-  alpha_Offset = 2
+  beta_offset = 0,
+  seed.par = NULL,
+  seed.data = NULL
 )
 }
 \arguments{
@@ -30,7 +32,11 @@ simData(
 
 \item{d0}{prior degree of freedom for simulating signal variance}
 
-\item{alpha_Offset}{a numerical value to offset all alpha_i, the larger the further away all signals will be from the noise}
+\item{beta_offset}{a numerical value to offset all beta_offset, the larger the further away all signals will be from the noise}
+
+\item{seed.par}{seed for simulating parameters, default = NULL}
+
+\item{seed.data}{seed for simulating Z and Y, default = NULL}
 }
 \value{
 a list of data and simulated true parameters
@@ -42,7 +48,7 @@ a list of data and simulated true parameters
 \item \code{Pos_control}  a matrix of all observed counts for Positive control probes. Probes by sample
 \item \code{pi_i} vector of simulated sample marginal prior probabilty of observing signal
 \item \code{mu_0i} vector simulated background mean
-\item \code{sigma_0i} vector of simulate background variance
+\item \code{sigma_0i} vector of simulate background sd
 \item \code{alpha_i} vector of simulated sample contribution to signal mean, offset included
 \item \code{beta_g} vector of simulated probe contribution to signal mean
 \item \code{alpha_i_beta_g} matrix of signal mean, same dimensions as \code{Y_mtx}
