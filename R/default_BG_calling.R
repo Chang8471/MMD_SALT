@@ -41,9 +41,15 @@ call_BG_wNegCtrl_Zscore = function(Ymtx, Neg_control, method, binary=NULL){
   if (method == "max"){
     return(call_Z_maxNegCtrl(Ymtx, Neg_control))
   }else if (method == "norm"){
+<<<<<<< HEAD
     Z_mtx = call_Z_normNegCtrl(Ymtx, Neg_control,zScore = T)
   }else if (method == "logNorm"){
     Z_mtx = call_Z_logNormNegCtrl(Ymtx, Neg_control,zScore = T)
+=======
+    Z_mtx = call_Z_normNegCtrl(Ymtx, Neg_control)
+  }else if (method == "logNorm"){
+    Z_mtx = call_Z_logNormNegCtrl(Ymtx, Neg_control)
+>>>>>>> 85d6de86f2340ac930b3b281048faceda0190873
   }
   if (binary) return(Z_mtx>binary)
   else return(Z_mtx)
@@ -98,8 +104,13 @@ call_Z_normNegCtrl = function(Ymtx, Neg_control, zScore = F){
 call_Z_logNormNegCtrl = function(Ymtx, Neg_control, zScore = F){
   mu_tmp = colMeans(log(Neg_control))
   sd_tmp = apply(log(Neg_control),2,sd)
+<<<<<<< HEAD
   if (zScore)  Z_mtx_est = sweep(sweep(log(Ymtx),2,mu_tmp,"-"),2,sd_tmp,"/")
   else  Z_mtx_est = t(pnorm(t(log(Ymtx)),mu_tmp,sd_tmp,lower.tail = F))
+=======
+  if (zScore)  Z_mtx_est = sweep(sweep(log(Y_mtx),2,mu_tmp,"-"),2,sd_tmp,"/")
+  else  Z_mtx_est = t(pnorm(t(log(Y_mtx)),mu_tmp,sd_tmp,lower.tail = F))
+>>>>>>> 85d6de86f2340ac930b3b281048faceda0190873
   return(Z_mtx_est)
 }
 
