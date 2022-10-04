@@ -82,6 +82,10 @@ parEst_itr = function(Y_mtx,pi_mtx = NULL,Z_mtx = NULL,
   beta[is.na(beta)] = mean(beta[1:nrow(Y_mtx)],na.rm = T) # genes never above background, get mean of all other beta_g
   beta_g = beta[1:nrow(Y_mtx)]
   alpha_i = c(0,beta[(1+nrow(Y_mtx)):length(beta)])
+  beta_g = beta_g+ mean(alpha_i)
+  alpha_i = alpha_i-mean(alpha_i)
+  beta[(1+nrow(Y_mtx)):length(beta)] = alpha_i[-1]
+  beta[1:nrow(Y_mtx)] = beta_g
   logY_fitted = x_mtx %*% cbind(beta) # fitted
 
   # above background mean matrix
