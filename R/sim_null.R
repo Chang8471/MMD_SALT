@@ -34,7 +34,7 @@
 #' @examples
 simData = function(nEndogenous = 800, nPosControl = 10, nNegControl = 5,
                    nSample = 500, alwaysOnGenes = 0,
-                   fixedBackground = T, d0 = 50, alpha_Offset = 2){
+                   fixedBackground = T, d0 = 50, beta_offset = 0){
 
 
   nGene = nEndogenous+nPosControl+nNegControl
@@ -42,8 +42,8 @@ simData = function(nEndogenous = 800, nPosControl = 10, nNegControl = 5,
 
   # parameters for signal component
   set.seed(seed.ab)
-  alpha_i = rnorm(nSample,0,.1)#rbeta(nSample,alpha_shape1,alpha_shape2) +alpha_Offset
-  beta_g = rnorm(nGene,3.4,2/3)+alpha_Offset
+  alpha_i = rnorm(nSample,0,.1)
+  beta_g = rnorm(nGene,3.4,2/3)+ beta_offset
   beta_g[(nGene-nPosControl+1):nGene] = 1:nPosControl # pos control, gradient
   sigma2_10 = exp(beta_g/1.3-4)
   sigma2_1g = (d0*sigma2_10)/rchisq(nGene,d0)
