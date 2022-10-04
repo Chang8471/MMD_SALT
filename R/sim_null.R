@@ -12,6 +12,8 @@
 #' @param fixedBackground boolean indicator, if true, all samples will share the same background mean and variance parameters
 #' @param d0 prior degree of freedom for simulating signal variance
 #' @param beta_offset a numerical value to offset all beta_offset, the larger the further away all signals will be from the noise
+#' @param seed.par seed for simulating parameters, default = NULL
+#' @param seed.data seed for simulating Z and Y, default = NULL
 #'
 #' @return a list of data and simulated true parameters
 #'
@@ -22,7 +24,7 @@
 #' \item `Pos_control`  a matrix of all observed counts for Positive control probes. Probes by sample
 #' \item `pi_i` vector of simulated sample marginal prior probabilty of observing signal
 #' \item `mu_0i` vector simulated background mean
-#' \item `sigma_0i` vector of simulate background variance
+#' \item `sigma_0i` vector of simulate background sd
 #' \item `alpha_i` vector of simulated sample contribution to signal mean, offset included
 #' \item `beta_g` vector of simulated probe contribution to signal mean
 #' \item `alpha_i_beta_g` matrix of signal mean, same dimensions as `Y_mtx`
@@ -104,12 +106,10 @@ simData = function(nEndogenous = 800, nPosControl = 10, nNegControl = 5,
 #' @param alwaysOnGenes for the endogenous probes, set certain amount always expressed in all samples, default = 0
 #' @param fixedBackground boolean indicator, if true, all samples will share the same background mean and variance parameters
 #' @param d0 prior degree of freedom for simulating signal variance
-#' @param alpha_Offset a numerical value to offset all alpha_i, the larger the further away all signals will be from the noise
-#' @param seed.ab seed for simulating parameters for signal components
-#' @param seed.sim seed for simulating background parameters, Z and Y
+#' @param beta_offset a numerical value to offset all beta_offset, the larger the further away all signals will be from the noise
+#' @param seed.par seed for simulating parameters, default = NULL
+#' @param seed.data seed for simulating Z and Y, default = NULL
 #' @param expressPercent fixed proportion of endogenous probes expressed in each sample
-#' @param alpha_shape1 first parameter to simulated alpha_i from rbeta()
-#' @param alpha_shape2 second parameter to simulated alpha_i from rbeta()
 #'
 #' @return a list of data and simulated true parameters
 #'
@@ -120,7 +120,7 @@ simData = function(nEndogenous = 800, nPosControl = 10, nNegControl = 5,
 #' \item `Pos_control`  a matrix of all observed counts for Positive control probes. Probes by sample
 #' \item `pi_i` true prior probability of signal in a sample, same as `expressPercent` input parameter
 #' \item `mu_0i` vector simulated background mean
-#' \item `sigma_0i` vector of simulate background variance
+#' \item `sigma_0i` vector of simulate background sd
 #' \item `alpha_i` vector of simulated sample contribution to signal mean, offset included
 #' \item `beta_g` vector of simulated probe contribution to signal mean
 #' \item `alpha_i_beta_g` matrix of signal mean, same dimensions as `Y_mtx`
@@ -133,7 +133,7 @@ simData = function(nEndogenous = 800, nPosControl = 10, nNegControl = 5,
 simData_fixSigProp = function(nEndogenous = 800,
                               nPosControl = 10, nNegControl = 10,
                               nSample = 500, alwaysOnGenes = 0,
-                              fixedBackground = F, d0 = 50, expressPercent = 1/5beta_offset = 0,
+                              fixedBackground = F, d0 = 50, expressPercent = 1/5,beta_offset = 0,
                               seed.par=NULL, seed.data=NULL){
 
 
