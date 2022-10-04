@@ -98,10 +98,8 @@ call_Z_normNegCtrl = function(Ymtx, Neg_control, zScore = F){
 call_Z_logNormNegCtrl = function(Ymtx, Neg_control, zScore = F){
   mu_tmp = colMeans(log(Neg_control))
   sd_tmp = apply(log(Neg_control),2,sd)
-
   if (zScore)  Z_mtx_est = sweep(sweep(log(Ymtx),2,mu_tmp,"-"),2,sd_tmp,"/")
   else  Z_mtx_est = t(pnorm(t(log(Ymtx)),mu_tmp,sd_tmp,lower.tail = F))
-
   return(Z_mtx_est)
 }
 
