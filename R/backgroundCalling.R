@@ -42,6 +42,7 @@ parEst_itr = function(Y_mtx,pi_mtx = NULL,Z_mtx = NULL,
     pi_i = colMeans(pi_mtx)
   }else if (!is.null(Z_mtx)){# only initial calls is provided
     pi_i = colMeans(Z_mtx)
+    # nothing here
   }
 
   # check if all elements are provided
