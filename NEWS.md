@@ -1,3 +1,9 @@
+# Version 0.0.5
+
+## Major changes
+
+* change `parEst_itr` function: for each iteration, resample Z labels from Bernoulli
+
 # Version 0.0.4
 
 ## Major changes
