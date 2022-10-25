@@ -38,7 +38,7 @@ parEst_itr = function(Y_mtx,pi_mtx = NULL,Z_mtx = NULL,
 
   # initialize and estimate pi_i
   if (!is.null(pi_mtx)){
-    Z_mtx = pi_mtx>.5
+    Z_mtx = matrix(rbinom(ncol(pi_mtx)*nrow(pi_mtx),1,pi_mtx),ncol=ncol(pi_mtx))
     pi_i = colMeans(pi_mtx)
   }else if (!is.null(Z_mtx)){# only initial calls is provided
     pi_i = colMeans(Z_mtx)
