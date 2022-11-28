@@ -8,6 +8,7 @@ parEst_itr(
   Y_mtx,
   pi_mtx = NULL,
   Z_mtx = NULL,
+  Z_cutoff = 0.5,
   EBrobust = F,
   filterBackground = F,
   Beta_bayes = F,
@@ -21,6 +22,8 @@ parEst_itr(
 \item{pi_mtx}{Matrix of likelihood of signal, same dimensions as \code{Y_mtx}.}
 
 \item{Z_mtx}{Matrix of binary labels, same dimensions as \code{Y_mtx}. 0 as in background, and 1 for signal. Will be ignored if \code{pi_mtx} is provided. Must be provided if \code{pi_mtx} is NULL.}
+
+\item{Z_cutoff}{numeric cutoff used to obtain binary label Z from \code{pi_mtx}. If \code{Z_cutoff=NULL}, sample Z from Bernoulli(pi)}
 
 \item{EBrobust}{Boolean indicator for \code{EBrobust} option for \code{squeezeVar} function from limma package, used for estimating signal component variance with Empirical Bayes. Default set to F.}
 

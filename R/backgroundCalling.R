@@ -6,6 +6,7 @@
 #' @param Y_mtx Matrix of raw counts, gene by sample
 #' @param pi_mtx Matrix of likelihood of signal, same dimensions as ``Y_mtx``.
 #' @param Z_mtx Matrix of binary labels, same dimensions as ``Y_mtx``. 0 as in background, and 1 for signal. Will be ignored if ``pi_mtx`` is provided. Must be provided if ``pi_mtx`` is NULL.
+#' @param Z_cutoff numeric cutoff used to obtain binary label Z from ``pi_mtx``. If `Z_cutoff=NULL`, sample Z from Bernoulli(pi)
 #' @param EBrobust Boolean indicator for ``EBrobust`` option for ``squeezeVar`` function from limma package, used for estimating signal component variance with Empirical Bayes. Default set to F.
 #' @param filterBackground Boolean indicator for only consider counts that are more than 2 SD away from background mean to possibly have signal. Default set to F.
 #' @param Beta_bayes Boolean indicator to use bayesian prior for ``beta_g`` estimation, default set to F.
@@ -32,17 +33,19 @@
 #' @export
 #'
 #' @examples
-parEst_itr = function(Y_mtx,pi_mtx = NULL,Z_mtx = NULL,
+parEst_itr = function(Y_mtx,pi_mtx = NULL,Z_mtx = NULL,Z_cutoff = .5,
                       EBrobust=F,filterBackground  =F,
                       Beta_bayes = F, Beta_0_weight = F, Beta_kappa = 10){
 
   # initialize and estimate pi_i
-  if (!is.null(pi_mtx)){
+  if (!is.null(pi_mtx) &is.null(Z_cutoff)){ # sample new Z given pi_gi
     Z_mtx = matrix(rbinom(ncol(pi_mtx)*nrow(pi_mtx),1,pi_mtx),ncol=ncol(pi_mtx))
+    pi_i = colMeans(pi_mtx)
+  }else if (!is.null(pi_mtx) &!is.null(Z_cutoff)){ # binarize pi_gi to Z with given cutoff
+    Z_mtx = pi_mtx>Z_cutoff
     pi_i = colMeans(pi_mtx)
   }else if (!is.null(Z_mtx)){# only initial calls is provided
     pi_i = colMeans(Z_mtx)
-    # nothing here
   }
 
   # check if all elements are provided

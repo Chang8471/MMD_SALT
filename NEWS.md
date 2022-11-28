@@ -2,7 +2,7 @@
 
 ## Major changes
 
-* change `parEst_itr` function: for each iteration, resample Z labels from Bernoulli
+* add an option to `parEst_itr` function, to either generate Z labels from a cutoff, or resample from Bernoulli(pi). Such that previous code will still run and get same result with updated package.
 
 # Version 0.0.4
 
