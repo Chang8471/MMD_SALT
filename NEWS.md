@@ -1,3 +1,9 @@
+# Version 0.0.6
+
+## Major changes
+
+* add functions for evaluating normalization 
+
 # Version 0.0.5
 
 ## Major changes
