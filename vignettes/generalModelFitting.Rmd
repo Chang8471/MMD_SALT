@@ -1,5 +1,5 @@
 ---
-title: "generalModelFitting"
+title: "GMM model usage"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{generalModelFitting}
@@ -10,10 +10,59 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
+  eval = F,
   comment = "#>"
 )
 ```
 
+
+### General steps to fit the GMM model 
+
+#### Minimal requirment to fit the model
+
+
 ```{r setup}
 library(nCounterNorm)
 ```
+
+``Y_mtx`` the count matrix for the endogenous probes, probe by sample
+
+``NegCtrl`` the count matrix for the negative control probes only, probe by sample
+
+
+#### Parameter estimation
+
+
+```{R}
+set.seed(1)
+fitted = fit_MMD(Y_mtx, NegCtrl = NegCtrl)
+```
+
+
+``fitted$model_fit`` contains all estimated parameters for the last iteration of model fit.
+
+``fitted$Z_mtx_adj`` is the matrix of posterior likelihood of each observed count contains signal, after monotonicity adjustment, same dimension as ``Y_mtx``.
+
+
+##### Fitting addtional iterations
+
+After the first round of model fitting, additional iterations are desired, instead of starting from the first iteration, the following can be done:
+
+```{R}
+fitted_moreIter = fit_MMD(Y_mtx, NegCtrl = fitted$model_fit$pi_mtx_posterior, maxIter = 5)
+```
+
+
+This will fit additional 5 iterations using the previous fit ``fitted$model_fit`` as the starting point.
+
+
+### Inference on differencial presence of target molecules 
+
+The posterior likelihood $\hat{z}$ can be used to make inference in two different ways:
+
+* Treat $\hat{z}$ as continuous outcomes that range from 0 to 1.
+
+* Use a cutoff to binarize, i.e. $\hat{z}>.5$, and fit models that are appropriate for binary outcomes.
+
+The latter put more emphasize on presence and absence transitions, instead of finding things that are unlikely to be present in one group and very unlikely to be present in the other group.
+
