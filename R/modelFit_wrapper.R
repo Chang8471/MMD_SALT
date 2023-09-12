@@ -33,10 +33,10 @@ fit_MMD = function(Y_mtx, maxIter = 20, NegCtrl = NULL, Z_mtx = NULL, verbose = 
 
   for(i in 2:20){
     if (verbose) print(paste("iter",i))
-    model_fit_tmp = parEst_itr(Y_mtx,pi_mtx=model_fit[[1]],
+    model_fit_tmp = parEst_itr(Y_mtx,pi_mtx=model_fit$pi_mtx_posterior,
                          EBrobust=F,filterBackground  =T,
                          Beta_bayes = F, Beta_0_weight = F, Beta_kappa = 10)
-    if(identical((model_fit_tmp[[1]]<.5 ),(model_fit[[1]]<.5))){
+    if(identical((model_fit_tmp$pi_mtx_posterior<.5 ),(model_fit$pi_mtx_posterior<.5))){
       if (verbose) print(paste("Stopped after iteration: ",i))
       model_fit = model_fit_tmp
       break
