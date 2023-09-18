@@ -1,7 +1,7 @@
 Package: nCounterNorm
 Type: Package
 Title: Data driven background noise and signal calling algorithm for NanoString nCounter data
-Version: 0.0.6
+Version: 0.0.7
 Authors@R: 
     person("Chang", "Yu", , "changyu8471@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
