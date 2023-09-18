@@ -1,3 +1,11 @@
+# Version 0.0.7
+
+## Major changes
+
+* add function to simulate data with differential presence and unbalanced sample effect.
+
+* add function to simulate data according to estimated parameters from real data fitting.
+
 # Version 0.0.6
 
 ## Major changes
