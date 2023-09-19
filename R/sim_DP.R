@@ -12,6 +12,7 @@
 #' @param seed.par seed for simulating parameters, default = 0
 #' @param seed.data seed for simulating Z and Y, default = 0
 #' @param expressPercent fixed proportion of endogenous probes expressed in each sample
+#' @param nDPgenes number of genes to introduce differential presence, will be split evenly to have higher likelihood to be detected in group A or B
 #'
 #' @return
 #' @export
@@ -23,7 +24,7 @@ sim_DP_wRealData = function(model_fit = NULL, sampleGroup = NULL,
                   baseline_SigPrev = .3, effectSize = .3,
                   nPosControl = 10, nNegControl = 10,
                   nSample = 500, d0 = 50, expressPercent = 1/5,beta_offset = 0,
-                  seed.par=0, seed.data=0){
+                  seed.par=0, seed.data=0, nDPgenes = 200){
 
   set.seed(seed.par)
 
@@ -71,8 +72,8 @@ sim_DP_wRealData = function(model_fit = NULL, sampleGroup = NULL,
   ind_groupA = 1:nGroupA
   ind_groupB = (1+nGroupA):(nGroupB+nGroupA)
   # sort genes by beta, select to add DD
-  ind_genes_DD_1 = (rank(-beta_g[1:nEndogenous]) %%(nEndogenous/nDDgenes))==1
-  ind_genes_DD_2 = (rank(-beta_g[1:nEndogenous]) %%(nEndogenous/nDDgenes))==2
+  ind_genes_DD_1 = (rank(beta_g[1:nEndogenous]) %%floor(nEndogenous/(nDPgenes/2)))==1
+  ind_genes_DD_2 = (rank(beta_g[1:nEndogenous]) %%floor(nEndogenous/(nDPgenes/2)))==2
 
   ########### up to here, all parameters simulated
 
