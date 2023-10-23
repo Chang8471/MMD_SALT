@@ -1,3 +1,11 @@
+# Version 0.0.8
+
+## Major changes
+
+* change `sim_DP` function so that the null genes no longer have fixed prior for Z~Bernolli(p_0)
+
+* change `sim_DP` function so that the alpha_i shift is done be moving one group down and the other up
+
 # Version 0.0.7
 
 ## Major changes
