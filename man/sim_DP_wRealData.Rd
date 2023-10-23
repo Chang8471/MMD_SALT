@@ -16,7 +16,8 @@ sim_DP_wRealData(
   expressPercent = 1/5,
   beta_offset = 0,
   seed.par = 0,
-  seed.data = 0
+  seed.data = 0,
+  nDPgenes = 200
 )
 }
 \arguments{
@@ -43,6 +44,8 @@ sim_DP_wRealData(
 \item{seed.par}{seed for simulating parameters, default = 0}
 
 \item{seed.data}{seed for simulating Z and Y, default = 0}
+
+\item{nDPgenes}{number of genes to introduce differential presence, will be split evenly to have higher likelihood to be detected in group A or B}
 }
 \value{
 

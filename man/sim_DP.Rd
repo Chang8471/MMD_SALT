@@ -11,6 +11,8 @@ sim_DP(
   nSample = 500,
   d0 = 50,
   expressPercent = 1/5,
+  p0_mean = 1/5,
+  p0_size = 1000,
   seed.par = NULL,
   seed.ZY = NULL,
   nGroupA,
@@ -32,6 +34,10 @@ sim_DP(
 
 \item{expressPercent}{fixed proportion of endogenous probes expressed in each sample}
 
+\item{p0_mean}{for null genes, mean parameter to simulate binomial rate}
+
+\item{p0_size}{for null genes, size parameter to simulate binomial rate}
+
 \item{seed.par}{seed for simulating parameters}
 
 \item{seed.ZY}{seed for simulating Z and Y}
@@ -42,7 +48,7 @@ sim_DP(
 
 \item{DP_effectSize}{how much more likely to be present in one group, on top of the baseline expressPercent}
 
-\item{alpha_shift}{shift group B's alpha_i by}
+\item{alpha_shift}{introduced confounding between groups of samples. Group A shift downward by alpha_shift/2, group B shift upward by alpha_shift/2}
 }
 \value{
 
