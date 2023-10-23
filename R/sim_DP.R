@@ -145,7 +145,7 @@ sim_DP_wRealData = function(model_fit = NULL, sampleGroup = NULL,
 #' @param p0_mean for null genes, mean parameter to simulate binomial rate
 #' @param p0_size for null genes, size parameter to simulate binomial rate
 #' @param nGroupA number of sample for one of the group of interest
-#' @param alpha_shift shift group B's alpha_i by
+#' @param alpha_shift introduced confounding between groups of samples. Group A shift downward by alpha_shift/2, group B shift upward by alpha_shift/2
 #' @param nDPgenes number of genes to introduce differential presence, will be split evenly to have higher likelihood to be detected in group A or B
 #' @param DP_effectSize how much more likely to be present in one group, on top of the baseline expressPercent
 #'
@@ -172,6 +172,7 @@ sim_DP = function(nEndogenous = 800, nPosControl = 10, nNegControl = 10,
   tmp = round(1:nGroupA/(nGroupA+1)*nSample)
   ind_groupA = rank(alpha_i) %in% tmp # index of group A samples
   ind_groupB = rank(alpha_i) %in% (tmp+1) # index of group B samples
+  alpha_i[ind_groupA] = alpha_i[ind_groupA] - alpha_shift/2
   alpha_i[ind_groupB] = alpha_i[ind_groupA] + alpha_shift # shift sample effect for two groups
 
 
