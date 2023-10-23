@@ -1,3 +1,10 @@
+
+# Version 0.0.9
+
+## Major changes
+
+* new function `sim_DP_sampling` to simulate DP by splitting 100 samples into 2 groups
+
 # Version 0.0.8
 
 ## Major changes
