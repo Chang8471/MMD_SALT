@@ -299,9 +299,6 @@ sim_DP_sampling = function(nEndogenous = 800, nPosControl = 10, nNegControl = 10
   sigma2_10 = exp(beta_g/1.3-4)
   sigma2_1g = (d0*sigma2_10)/rchisq(nGene,d0)
   sigma2_1g[(nGene-nPosControl+1):nGene]=0 # pos control
-  alphai_beta_g = matrix(0,nrow = nGene,ncol = nSample)
-  alphai_beta_g = sweep(alphai_beta_g,1,beta_g,"+")
-  alphai_beta_g = sweep(alphai_beta_g,2,alpha_i,"+")
 
   # background parameters
   mu_0i = rlnorm(nSample, 3,.1)
@@ -319,7 +316,11 @@ sim_DP_sampling = function(nEndogenous = 800, nPosControl = 10, nNegControl = 10
   ind_groupB = sample(samples_ofInt,nGroupA, prob = exp(alpha_i[samples_ofInt]*batchEffect))
   ind_groupA = samples_ofInt[!(samples_ofInt %in% ind_groupB)]
 
-  #return(mean(alpha_i[ind_groupB])-mean(alpha_i[ind_groupA]))
+  alphai_beta_g = matrix(0,nrow = nGene,ncol = nSample)
+  alphai_beta_g = sweep(alphai_beta_g,1,beta_g,"+")
+  alphai_beta_g = sweep(alphai_beta_g,2,alpha_i,"+")
+
+  # return(mean(alpha_i[ind_groupB])-mean(alpha_i[ind_groupA]))
 
   ################## simulate Z and Y
   # Z_gi, fix a proportion of genes expressed in each sample
