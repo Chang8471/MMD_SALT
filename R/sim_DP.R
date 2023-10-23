@@ -142,6 +142,8 @@ sim_DP_wRealData = function(model_fit = NULL, sampleGroup = NULL,
 #' @param seed.ZY seed for simulating Z and Y
 #'
 #' @param expressPercent fixed proportion of endogenous probes expressed in each sample
+#' @param p0_mean for null genes, mean parameter to simulate binomial rate
+#' @param p0_size for null genes, size parameter to simulate binomial rate
 #' @param nGroupA number of sample for one of the group of interest
 #' @param alpha_shift shift group B's alpha_i by
 #' @param nDPgenes number of genes to introduce differential presence, will be split evenly to have higher likelihood to be detected in group A or B
@@ -153,6 +155,7 @@ sim_DP_wRealData = function(model_fit = NULL, sampleGroup = NULL,
 #' @examples
 sim_DP = function(nEndogenous = 800, nPosControl = 10, nNegControl = 10,
                         nSample = 500, d0 = 50, expressPercent = 1/5,
+                        p0_mean = 1/5, p0_size = 1000,
                         seed.par = NULL, seed.ZY = NULL,
                         nGroupA,  nDPgenes, DP_effectSize, alpha_shift = 0){
   set.seed(seed.par)
@@ -203,7 +206,9 @@ sim_DP = function(nEndogenous = 800, nPosControl = 10, nNegControl = 10,
 
   # introduce differential presence
   # baseline rate
-  pi_tmp = matrix(expressPercent, nrow = nEndogenous, ncol=nGroupA)
+  p_0G = rbeta(nEndogenous,p0_mean*p0_size, (1-p0_mean)*p0_size)
+  p_0G[ind_genes_DD_1|ind_genes_DD_2] = p0_mean
+  pi_tmp = matrix(rep(p_0G,nGroupA), nrow = nEndogenous, ncol=nGroupA)
   # simulate z matrix, for sample of interest
   Z_mtx[(1:nEndogenous),ind_groupA] = matrix(rbinom(nEndogenous*nGroupA,1,
                                                     sweep(pi_tmp,1,ind_genes_DD_1*DP_effectSize,"+")),
@@ -235,6 +240,7 @@ sim_DP = function(nEndogenous = 800, nPosControl = 10, nNegControl = 10,
     alpha_i = alpha_i, beta_g = beta_g[1:nEndogenous],alpha_i_beta_g=alphai_beta_g[1:nEndogenous,],
     sigma2_10 = sigma2_10[1:nEndogenous], sigma2_1g = sigma2_1g[1:nEndogenous],
 
+    p_0G = p_0G,
     ind_groupA=ind_groupA,ind_groupB=ind_groupB,
     ind_genes_DD_1=ind_genes_DD_1,ind_genes_DD_2=ind_genes_DD_2
   )
