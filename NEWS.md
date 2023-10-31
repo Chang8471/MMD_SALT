@@ -1,3 +1,8 @@
+# Version 0.0.10
+
+## Major changes
+
+* change `sim_DP_sampling` function to sample according to order statistics of alpha_i
 
 # Version 0.0.9
 
