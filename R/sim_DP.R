@@ -268,7 +268,7 @@ sim_DP = function(nEndogenous = 800, nPosControl = 10, nNegControl = 10,
 #' @param p0_mean for null genes, mean parameter to simulate binomial rate
 #' @param p0_size for null genes, size parameter to simulate binomial rate
 #' @param nGroupA number of sample for one of the group of interest
-#' @param alpha_shift introduced confounding between groups of samples. Group A shift downward by alpha_shift/2, group B shift upward by alpha_shift/2
+#' @param batchEffect introduced confounding between groups of samples. "none" or "weak" or "medium" or "strong"
 #' @param nDPgenes number of genes to introduce differential presence, will be split evenly to have higher likelihood to be detected in group A or B
 #' @param DP_effectSize how much more likely to be present in one group, on top of the baseline expressPercent
 #'
@@ -280,7 +280,15 @@ sim_DP_sampling = function(nEndogenous = 800, nPosControl = 10, nNegControl = 10
                   nSample = 500, d0 = 50, expressPercent = 1/5,
                   p0_mean = 1/5, p0_size = 1000,
                   seed.par = NULL, seed.ZY = NULL,
-                  nGroupA,  nDPgenes, DP_effectSize, batchEffect = 0){
+                  nGroupA,  nDPgenes, DP_effectSize, batchEffect = "none"){
+
+  if (batchEffect=="none") {probFunc = function(x) 1+x*0
+  }else if(batchEffect=="weak") {probFunc = function(x) 10+x*.5
+  }else if(batchEffect=="medium") {probFunc = function(x) 1.4^(x*.1)
+  }else if(batchEffect=="strong") probFunc = function(x) exp(x*.1)
+
+
+
   set.seed(seed.par)
 
   # total number of probes
@@ -305,16 +313,16 @@ sim_DP_sampling = function(nEndogenous = 800, nPosControl = 10, nNegControl = 10
   sigma_0i = mu_0i*exp(-.9)
 
 
+  set.seed(seed.ZY)
+
   # sample effect
   alpha_shape1=3;alpha_shape2=3
   alpha_i = rbeta(nSample,alpha_shape1,alpha_shape2)
-  # sample of interest
-  tmp = round(1:(nGroupA*2)/(nGroupA*2+1)*nSample)
-  samples_ofInt = which(rank(alpha_i) %in% tmp)
+  alpha_i[1:(nGroupA*2)] = sort(alpha_i[1:(nGroupA*2)]) # sort samples of interest to use order stats
 
-  set.seed(seed.ZY)
-  ind_groupB = sample(samples_ofInt,nGroupA, prob = exp(alpha_i[samples_ofInt]*batchEffect))
-  ind_groupA = samples_ofInt[!(samples_ofInt %in% ind_groupB)]
+
+  ind_groupB = sample(1:(nGroupA*2),nGroupA, prob = probFunc(1:(nGroupA*2))) # sample order stats, w/ uniform probability or not
+  ind_groupA = c(1:(nGroupA*2))[-ind_groupB]
 
   alphai_beta_g = matrix(0,nrow = nGene,ncol = nSample)
   alphai_beta_g = sweep(alphai_beta_g,1,beta_g,"+")

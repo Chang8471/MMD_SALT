@@ -18,7 +18,7 @@ sim_DP_sampling(
   nGroupA,
   nDPgenes,
   DP_effectSize,
-  batchEffect = 0
+  batchEffect = "none"
 )
 }
 \arguments{
@@ -48,7 +48,7 @@ sim_DP_sampling(
 
 \item{DP_effectSize}{how much more likely to be present in one group, on top of the baseline expressPercent}
 
-\item{alpha_shift}{introduced confounding between groups of samples. Group A shift downward by alpha_shift/2, group B shift upward by alpha_shift/2}
+\item{batchEffect}{introduced confounding between groups of samples. "none" or "weak" or "medium" or "strong"}
 }
 \value{
 
