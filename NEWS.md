@@ -1,3 +1,11 @@
+# Version 0.0.11
+
+## Major changes
+
+* new function, instead of using `forceMono`, now calculate the desired count to reach a prespecified postL cutoff with `calc_count_cutoff`
+
+* new function, `est_sensitivity` to calculate sample specific sensitivity
+
 # Version 0.0.10
 
 ## Major changes
