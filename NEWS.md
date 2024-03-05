@@ -1,3 +1,9 @@
+# Version 0.0.12
+
+## Major changes
+
+* new functions related proposed new likelihood ratio test, that takes into consideration of sample-specific sensitivities
+
 # Version 0.0.11
 
 ## Major changes
