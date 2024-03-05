@@ -36,7 +36,7 @@ calc_count_cutoff = function(postL_cutoff, useparEst_itr_out,  parEst_itr_out=NU
   if(any(is.null(alphai_beta_g),is.null(sigma2_1g),is.null(mu_0i),is.null(sigma2_0i),is.null(pi_prior))) stop("argument missing")
 
 
-  ####### correction
+  #######
   count_cufoffs = sapply(1:(nrow(alphai_beta_g)*ncol(alphai_beta_g)), function(i){
     P_signal_func = function(x) dlnorm(x,alphai_beta_g[i],sqrt(sigma2_1g[i]))
     P_background_func = function(x) dnorm(x, mu_0i[i], sqrt(sigma2_0i[i]))
@@ -53,4 +53,43 @@ calc_count_cutoff = function(postL_cutoff, useparEst_itr_out,  parEst_itr_out=NU
   return(matrix(count_cufoffs,nrow = nrow(alphai_beta_g)))
 }
 
+
+
+#' Calc sample-specific sensitivity
+#'
+#' @description Calculate sample-specific sensitivity for each sample and gene combination
+#'
+#' @param useparEst_itr_out boolean indicator to use output object from ``parEst_itr`` function
+#' @param parEst_itr_out if ``useparEst_itr_out`` is T, then provide the output object from ``parEst_itr`` function
+#' @param gridResolution number of grid nodes to generate for the step function for posterior likelihood
+#' @param alphai_beta_g mandatory parameter if ``useparEst_itr_out`` is F, will be ignored otherwise. Matrix of signal mean, after log normal approximation. Same dimensions as ``Y_mtx``.
+#' @param sigma2_1g mandatory parameter if ``useparEst_itr_out`` is F, will be ignored otherwise. Matrix of signal variance, after log normal approximation. Same dimensions as ``Y_mtx``.
+#' @param mu_0i mandatory parameter if ``useparEst_itr_out`` is F, will be ignored otherwise. Matrix of background mean. Same dimensions as ``Y_mtx``.
+#' @param sigma2_0i mandatory parameter if ``useparEst_itr_out`` is F, will be ignored otherwise. Matrix of background variance. Same dimensions as ``Y_mtx``.
+#' @param pi_prior mandatory parameter if ``useparEst_itr_out`` is F, will be ignored otherwise. Matrix of prior likelihood of signal. Same dimensions as ``Y_mtx``.
+#'
+#' @return Matrix of posterior likelihood, same dimensions as ``alphai_beta_g``.
+#' @export
+#'
+#' @examples
+est_sensitivity = function(count_cufoffs, useparEst_itr_out,  parEst_itr_out=NULL,gridResolution=500,
+                           alphai_beta_g=NULL,sigma2_1g = NULL,mu_0i=NULL,sigma2_0i=NULL,pi_prior=NULL){
+
+  if(useparEst_itr_out){
+    if(!is.null(parEst_itr_out$S2_hat)){
+      alphai_beta_g = parEst_itr_out$m_hat
+      sigma2_1g = parEst_itr_out$S2_hat
+    }else{
+      alphai_beta_g = parEst_itr_out$alphai_beta_g
+      sigma2_1g = parEst_itr_out$sigma2_1g
+    }
+    mu_0i = parEst_itr_out$mu_0i
+    sigma2_0i = parEst_itr_out$sigma2_0i
+    pi_prior = parEst_itr_out$pi_prior
+  }
+
+  if(any(is.null(alphai_beta_g),is.null(sigma2_1g),is.null(mu_0i),is.null(sigma2_0i),is.null(pi_prior))) stop("argument missing")
+
+  return(plnorm(count_cufoffs, alphai_beta_g,sqrt(sigma2_1g), lower.tail = F))
+}
 
