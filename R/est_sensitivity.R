@@ -18,7 +18,7 @@
 #'
 #' @examples
 calc_count_cutoff = function(postL_cutoff, useparEst_itr_out,  parEst_itr_out=NULL,gridResolution=500,
-                     alphai_beta_g=NULL,sigma2_1g = NULL,mu_0i=NULL,sigma2_0i=NULL,pi_prior=NULL){
+                             alphai_beta_g=NULL,sigma2_1g = NULL,mu_0i=NULL,sigma2_0i=NULL,pi_prior=NULL){
 
   if(useparEst_itr_out){
     if(!is.null(parEst_itr_out$S2_hat)){
@@ -45,10 +45,16 @@ calc_count_cutoff = function(postL_cutoff, useparEst_itr_out,  parEst_itr_out=NU
     postL_func = function(x, postL_cutoff){
       P_signal_func(x)*pi_prior_tmp/(P_signal_func(x)*pi_prior_tmp+P_background_func(x)*(1-pi_prior_tmp))-postL_cutoff
     }
-    root_tmp = uniroot(postL_func, lower = mu_0i[i], upper = 2*exp(alphai_beta_g[i]), postL_cutoff = .9)$root
-    return(root_tmp)
-  })
+    upper_tmp = exp(alphai_beta_g[i])
+    upper_tmp = ifelse(postL_func(upper_tmp,postL_cutoff = postL_cutoff)<0, exp(2)*upper_tmp, upper_tmp)
+    upper_tmp = ifelse(postL_func(upper_tmp,postL_cutoff = postL_cutoff)<0, exp(2)*upper_tmp, upper_tmp)
+    upper_tmp = ifelse(postL_func(upper_tmp,postL_cutoff = postL_cutoff)<0, exp(2)*upper_tmp, upper_tmp)
+    upper_tmp = ifelse(postL_func(upper_tmp,postL_cutoff = postL_cutoff)<0, exp(2)*upper_tmp, upper_tmp)
 
+    return(ifelse(postL_func(upper_tmp,postL_cutoff = postL_cutoff)<0, NA,
+                  uniroot(postL_func, lower = mu_0i[i], upper = upper_tmp, postL_cutoff = postL_cutoff)$root))
+
+  })
 
   return(matrix(count_cufoffs,nrow = nrow(alphai_beta_g)))
 }
