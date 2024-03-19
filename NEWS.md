@@ -1,3 +1,9 @@
+# Version 0.0.13
+
+## Major fix
+
+* change `calc_count_cutoff` to expand uniroot upper end if no solution
+
 # Version 0.0.12
 
 ## Major changes
