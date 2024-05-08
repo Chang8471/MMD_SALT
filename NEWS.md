@@ -1,3 +1,10 @@
+
+# Version 0.0.14
+
+## Minor changes
+
+* change `calc_S_LR` to return both the calculated test statistics and the estimated $p_1$ under the alternative
+
 # Version 0.0.13
 
 ## Major fix
