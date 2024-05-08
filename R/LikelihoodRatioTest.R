@@ -26,7 +26,7 @@ calc_S_LR  = function(Z0,Z1,n0,n1,s0,s1){
   p1_hat = tmp$maximum; l1 = l1 +tmp$objective
 
   # LR statistics for one-sided test
-  return(c(LR_stat = -2*(l0-l1), p1_hat = p1_hat))
+  return(c(LR_stat = -2*(l0-l1), p_diff = p1_hat-p0_hat,p0_hat = p0_hat, p1_hat = p1_hat))
 }
 
 
