@@ -71,6 +71,6 @@ S_LRT_null = function( n0,n1,p0,s0,s1,nRep = 1000){
     set.seed(seed)
     # simulate data under null
     Z0 = rbinom(n0,1,p0*s0); Z1 = rbinom(n1,1,p0*s1)
-    return(calc_S_LR(Z0,Z1,n0,n1,s0,s1))
+    return(calc_S_LR(Z0,Z1,n0,n1,s0,s1)[1])
   })
 }
