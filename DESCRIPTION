@@ -1,6 +1,6 @@
-Package: nCounterNorm
+Package: MMD_SALT
 Type: Package
-Title: Data driven background noise and signal calling algorithm for NanoString nCounter data
+Title: Data driven background noise and signal calling algorithm for NanoString nCounter data (MMD: multi-study miRNA detection), and sensitivity adjusted likelihood ratio test (SALT) 
 Version: 0.0.14
 Authors@R: 
     person("Chang", "Yu", , "changyu8471@gmail.com", role = c("aut", "cre"),
